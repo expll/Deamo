@@ -51,6 +51,11 @@ UIBackgroundTaskIdentifier bgTaskID;
     swizzledSelector = @selector(Deamo_application:didFinishLaunchingWithOptions:);
     [self SwizzledMethod:class OrigSEL:originalSelector SwizzledSEL:swizzledSelector];
     
+    class = objc_getClass("AppDelegate");
+    originalSelector = @selector(applicationDidEnterBackground:);
+    swizzledSelector = @selector(Deamo_applicationDidEnterBackground:);
+    [self SwizzledMethod:class OrigSEL:originalSelector SwizzledSEL:swizzledSelector];
+    
     
 }
 
@@ -68,6 +73,35 @@ UIBackgroundTaskIdentifier bgTaskID;
     [soundBoard startPreventSleep];
     
     return ret;
+}
+
+- (void)Deamo_applicationDidEnterBackground:(UIApplication *)application
+{
+    UIApplication*   app = [UIApplication sharedApplication];
+    __block    UIBackgroundTaskIdentifier bgTask;
+    bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (bgTask != UIBackgroundTaskInvalid)
+            {
+                bgTask = UIBackgroundTaskInvalid;
+            }
+        });
+    }];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (bgTask != UIBackgroundTaskInvalid)
+            {
+                bgTask = UIBackgroundTaskInvalid;
+            }
+        });
+    });
+    
+    [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:^{
+        NSLog(@"KeepAlive");
+    }];
+    
+    
+    [self Deamo_applicationDidEnterBackground:application];
 }
 
 
