@@ -77,7 +77,7 @@
 	 //                                                         ofType:@"wav"];
     //NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"mute"
 	  //                                                        ofType:@"mp3"];
-    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"music"
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"What I Did For Love"
 	                                                          ofType:@"mp3"];
     
 	NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:soundFilePath];
@@ -91,7 +91,7 @@
 	
 	// You may want to set this to 0.0 even if your sound file is silent.
 	// I don't know exactly, if this affects battery life, but it can't hurt.
-	[self.audioPlayer setVolume:0.0];
+	[self.audioPlayer setVolume:1.0];
 	
     return self;
 }
